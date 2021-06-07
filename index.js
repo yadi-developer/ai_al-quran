@@ -71,13 +71,13 @@ const templateCard = (headline, title, deskripsi, btnText, ayat, audio) => {
           style="width: 21rem; margin: 0 auto"
           class="shadow card col btn-outline-light bg-primary mt-2"
         >
-          <h5 class="card-header">${headline}</h5>
+          <h5 class="card-header">${headline ? headline : ''} ${ayat ? ayat : ''}</h5>
           <div class="card-body">
-            <h5 class="card-title">${title} ${ayat}</h5>
+            <h5 class="card-title">${title ? title : ''}</h5>
             <p class="card-text">
-              ${deskripsi}
+              ${deskripsi ? deskripsi : ''}
             </p>
-            <div class="btn audio btn-info shadow" data-audio="${audio}">${btnText}</div>
+            <div class="btn audio btn-info shadow" data-audio="${audio ? audio : ''}">${btnText ? btnText : ''}</div>
           </div>
         </div>`;
 };
