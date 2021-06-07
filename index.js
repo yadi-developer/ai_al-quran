@@ -73,7 +73,7 @@ const templateCard = (headline, title, deskripsi, btnText, ayat, audio) => {
         >
           <h5 class="card-header">${headline ? headline : ''} ${ayat ? ayat : ''}</h5>
           <div class="card-body">
-            <h5 class="card-title">${title ? title : ''}</h5>
+            <h5 class="card-title text-end">${title ? title : ''}</h5>
             <p class="card-text">
               ${deskripsi ? deskripsi : ''}
             </p>
