@@ -92,12 +92,12 @@ const action = (list) => {
   let musik = "",
     isPlaying = false;
   audio.forEach((item) => {
-    const data = item.dataset.audio;
+    
+    item.addEventListener("click", function () {
+const data = item.dataset.audio;
     const a = new Audio();
     musik = data;
     a.src = musik;
-    item.addEventListener("click", function () {
-      a.pause();
       isPlaying = true;
       if (isPlaying) {
         a.play();
