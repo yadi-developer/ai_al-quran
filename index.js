@@ -1,3 +1,5 @@
+eruda.init();
+
 const input = document.querySelector(".asked"),
   btn = document.querySelector(".search");
 
@@ -6,11 +8,15 @@ btn.addEventListener("click", (e) => {
   e.preventDefault();
 });
 
-function getData(text) {
-  return fetch(
-    "https://api.bluenetid.com/alquran/6d56a1b89b4ee7bc3c2ccbe163cba0cf?query=" +
-      text
-  )
+const base_url =
+  "https://api.bluenetid.com/alquran/6d56a1b89b4ee7bc3c2ccbe163cba0cf?query=";
+
+const yadi = {
+  url: "https://al-quran-8d642.firebaseio.com/data.json?print=pretty",
+};
+
+function getData(base_url, text) {
+  return fetch(base_url + (text ? text : ""))
     .then((res) => {
       if (!res.ok) {
         throw new Error(res.statusText);
@@ -20,15 +26,42 @@ function getData(text) {
     .then((res) => res);
 }
 
-const doFetch = async (text) => {
-  const data = await getData(text);
-  let quran = {
-    type: "al-quran",
-    val: "",
-  };
-  const list = document.querySelector(".list");
-
+const murotalPlay = async () => {
+  //Murottal
   try {
+    const murottal = await getData(yadi.url);
+    const list = document.querySelector(".list");
+    let ins = "";
+    murottal.forEach((m) => {
+      ins += templateCard(
+        m.nama,
+        m.asma,
+        m.keterangan,
+        "Play",
+        "Ayat ke " + m.nomor,
+        m.audio
+      );
+    });
+    list.innerHTML = ins;
+    action(list);
+  } catch (e) {
+    console.log(e);
+    console.log("Gagal memulai murottal");
+  }
+};
+
+murotalPlay();
+
+const doFetch = async (text) => {
+  try {
+    //Qur'an
+    const data = await getData(base_url, text);
+    let quran = {
+      type: "al-quran",
+      val: "",
+    };
+    const list = document.querySelector(".list");
+
     if (data.type === quran.type) {
       data.data.forEach((item) => {
         tampilData(item, quran, list);
@@ -56,12 +89,19 @@ const tampilData = (data, quran, msok) => {
 
 const action = (list) => {
   const audio = list.querySelectorAll(".audio");
+  let musik = "",
+    isPlaying = false;
   audio.forEach((item) => {
     const data = item.dataset.audio;
+    const a = new Audio();
+    musik = data;
+    a.src = musik;
     item.addEventListener("click", function () {
-      const a = new Audio();
-      a.src = data;
-      a.play();
+      a.pause();
+      isPlaying = true;
+      if (isPlaying) {
+        a.play();
+      }
     });
   });
 };
@@ -71,13 +111,17 @@ const templateCard = (headline, title, deskripsi, btnText, ayat, audio) => {
           style="width: 21rem; margin: 0 auto"
           class="shadow card col btn-outline-light bg-primary mt-2"
         >
-          <h5 class="card-header">${headline ? headline : ''} ${ayat ? ayat : ''}</h5>
+          <h5 class="card-header">${headline ? headline : ""} ${
+    ayat ? ayat : ""
+  }</h5>
           <div class="card-body">
-            <h5 class="card-title text-end">${title ? title : ''}</h5>
+            <h5 class="card-title text-end">${title ? title : ""}</h5>
             <p class="card-text">
-              ${deskripsi ? deskripsi : ''}
+              ${deskripsi ? deskripsi : ""}
             </p>
-            <div class="btn audio btn-info shadow" data-audio="${audio ? audio : ''}">${btnText ? btnText : ''}</div>
+            <div class="btn audio btn-info shadow" data-audio="${
+              audio ? audio : ""
+            }">${btnText ? btnText : ""}</div>
           </div>
         </div>`;
 };
