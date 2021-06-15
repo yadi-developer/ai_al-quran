@@ -1,4 +1,4 @@
-eruda.init();
+
 
 const input = document.querySelector(".asked"),
   btn = document.querySelector(".search");
@@ -38,7 +38,7 @@ const murotalPlay = async () => {
         m.asma,
         m.keterangan,
         "Play",
-        "Ayat ke " + m.nomor,
+        "Surah ke " + m.nomor,
         m.audio
       );
     });
